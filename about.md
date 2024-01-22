@@ -21,6 +21,6 @@ in Computer Science from Technical University of Berlin, a BSc in
 Economics from the University of Mannheim, and a MSc in Environmental
 Economics and Climate Change from the London School of Economics.
 
-My GitHub account is [https://github.com/jbraese](jbraese).
+My GitHub account is [jbraese](https://github.com/jbraese).
 You can also get in touch with me by email under
 lastname.firstname@gmail.com.

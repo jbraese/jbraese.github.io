@@ -1,14 +1,14 @@
 ---
 layout: post
-title: Saving Bandwith While Getting Cloud-Free SENTINEL-2 Imagery With Python
+title: Downloading cloud-free satellite image time series using Python (the efficient way)
 categories: [post]
 ---
 
-For a recent project, I wanted to analyse satellite images from the European Space Agency’s Sentinel-2 mission over specific areas and over time. My areas of interest were quite small (low single-digit square kilometres), whereas Sentinel-2 satellite images are usually published in huge 100x100km2 chunks. This post describes how I went about this in what seems to me a fairly efficient way. All data and software used here is open access/open source.
+For a recent project, I wanted to analyse satellite images from the European Space Agency’s Sentinel-2 mission over specific areas and over time. The Sentinel-2 mission is pretty great: it has 10-meter resolution optical imagery, takes a picture of almost all points on the continental earth every five days, and is completely free to access. My areas of interest were quite small (low single-digit square kilometres), whereas Sentinel-2 satellite images are usually published in huge 100x100km2 chunks. This post describes how I went about this in what seems to me a fairly efficient way. All data and software used here is open access/open source.
 
 <!--more-->
 
-We take a two-step process to process as little unnecessary data as possible and keep our analysis relatively fast. First, we identify those images that might potentially be relevant for us by looking at image metadata only (see section 2.). Second, we look at the actual image data in our area of interest, check for clouds, and download if it is actually useful for us (see section 3.). The analysis uses Sentinel-2 images in COG format hosted on AWS S3.
+We take a two-step process to process as little unnecessary data as possible and keep our analysis relatively fast. First, we identify those images that might potentially be relevant for us by looking at image metadata only (see section 2.). Second, we look at the actual image data in our area of interest, check for clouds, and download only if it is actually useful for us (see section 3.). The analysis uses Sentinel-2 images in COG format hosted on AWS S3.
 
 ## 1. Define Areas of Interest
 
@@ -78,7 +78,7 @@ parks = [
 
 ## 2. Identifying Suitable Satellite Images Based on STAC Metadata
 
-The European Space Agency’s SENTINEL-2 mission is pretty great: it has 10-meter resolution optical imagery, takes a picture of almost all points on the continental earth every five days, and is completely free to access. It is also hosted in the wonderful COG format (see next section) on AWS S3 [here](https://registry.opendata.aws/sentinel-2-l2a-cogs/). This data is searchable through a STAC API. The STAC or [SpatioTemporal Asset Catalog](https://stacspec.org/en) specification provides a unified way to query our data and allows us to filter the many available images with spatial, temporal, or other metadata filters. In Python, we can use the [pystac-client](https://github.com/stac-utils/pystac-client) library to identify images that seem relevant to us. We just point it to the catalogue on S3 and we are ready to query.
+SENTINEL-2 data can be accessed in a number of ways. Here, I use the catalogue hosted on AWS S3 [here](https://registry.opendata.aws/sentinel-2-l2a-cogs/) in the wonderful COG format (see next section). This data is searchable through a STAC API. The STAC or [SpatioTemporal Asset Catalog](https://stacspec.org/en) specification provides a unified way to query our data and allows us to filter the many available images with spatial, temporal, or other metadata filters. In Python, we can use the [pystac-client](https://github.com/stac-utils/pystac-client) library to identify images that seem relevant to us. We just point it to the catalogue on S3 and we are ready to query.
 
 An image that is useful to our analysis should fulfil three properties. First, it should overlap one of the areas of interest we defined in the previous step. Second, it should be taken in the timeframe that we are interested in. Here, we are searching for images taken in 2022. Finally, it should not contain clouds over the areas of interest.
 
